@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
 import { sounds } from '@/lib/sounds';
 
 const ConfettiPiece = ({ color }: { color: string }) => {
@@ -44,21 +44,7 @@ interface BalloonProps {
 const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop, initialX, animationDuration, onAnimationComplete }) => {
   const [isPopped, setIsPopped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-
-  const handleClick = () => {
-    if (isPopped) return;
-
-    if (isCorrect) {
-      sounds.playCorrect();
-      setIsPopped(true);
-      setTimeout(() => onAnimationComplete(id), 1200); // Give confetti time to animate
-    } else {
-      sounds.playIncorrect();
-      setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 500);
-    }
-    onPop(id, isCorrect);
-  };
+  const controls = useAnimationControls();
 
   const balloonVariants = {
     hidden: { y: '110vh', scale: 1 },
@@ -67,22 +53,33 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
       transition: {
         duration: animationDuration,
         ease: 'linear',
-        onComplete: () => {
-          if (!isPopped) {
-            onAnimationComplete(id);
-          }
-        }
       },
-    },
-    popped: {
-      // This variant will now apply to the confetti container
-      // It stops the upward motion when a balloon is popped
     },
   };
 
-  const shakeAnimation = { 
-    x: [0, -5, 5, -5, 5, 0], 
-    transition: { duration: 0.5 } 
+  useEffect(() => {
+    // This promise resolves when the animation completes (floats off-screen)
+    controls.start('visible').then(() => {
+      if (!isPopped) {
+        onAnimationComplete(id);
+      }
+    });
+  }, [controls, id, isPopped, onAnimationComplete]);
+
+  const handleClick = () => {
+    if (isPopped) return;
+
+    if (isCorrect) {
+      sounds.playCorrect();
+      controls.stop(); // Stop the balloon from moving
+      setIsPopped(true);
+      setTimeout(() => onAnimationComplete(id), 1200); // Clean up after confetti
+    } else {
+      sounds.playIncorrect();
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+    }
+    onPop(id, isCorrect);
   };
 
   const swayAnimation = {
@@ -95,13 +92,18 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
     }
   };
 
+  const shakeAnimation = { 
+    x: [0, -5, 5, -5, 5, 0], 
+    transition: { duration: 0.5 } 
+  };
+
   return (
     <motion.div
       className="absolute cursor-pointer w-[120px] h-[150px]"
       style={{ left: `${initialX}%`, transform: 'translateX(-50%)' }}
       variants={balloonVariants}
       initial="hidden"
-      animate={isPopped ? 'popped' : 'visible'}
+      animate={controls}
       whileHover={!isPopped ? { scale: 1.1 } : {}}
       onTap={!isPopped ? handleClick : undefined}
     >
