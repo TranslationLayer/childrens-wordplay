@@ -31,7 +31,7 @@ const EndScreen = () => {
               variant="outline"
               className="h-16 text-2xl font-bold"
             >
-              Change Difficulty
+              Start Over
             </Button>
           </div>
         </CardContent>

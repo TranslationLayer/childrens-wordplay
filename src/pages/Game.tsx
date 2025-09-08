@@ -13,6 +13,7 @@ import CharacterGuide from '@/components/CharacterGuide';
 import { Progress } from '@/components/ui/progress';
 import { PawPrint } from 'lucide-react';
 import { sounds } from '@/lib/sounds';
+import StartOverButton from '@/components/StartOverButton';
 
 const TOTAL_MINI_GAMES = 4;
 
@@ -74,6 +75,7 @@ const Game = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-sky-100 p-4 relative overflow-hidden">
+      <StartOverButton />
       <GameTimer />
       <CharacterGuide message={gamePrompts[currentMiniGame]} />
       <div className="w-full max-w-2xl mb-8 absolute top-5">
