@@ -30,7 +30,7 @@ const CharacterGuide: React.FC<CharacterGuideProps> = ({ message }) => {
           <circle cx="55" cy="80" r="7" fill="black"/>
           <circle cx="95" cy="80" r="7" fill="black"/>
           <path d="M70 100C75.5228 100 80 95.5228 80 90C80 84.4772 75.5228 80 70 80C64.4772 80 60 84.4772 60 90C60 95.5228 64.4772 100 70 100Z" fill="black"/>
-          <path d="M60 115C60 112.239 62.2386 110 65 110H85C87.7614 110 90 112.239 90 115" stroke="black" strokeWidth="4" strokeLinecap="round"/>
+          <path d="M60 115 C 60 125, 90 125, 90 115" stroke="black" strokeWidth="4" strokeLinecap="round"/>
         </svg>
       </motion.div>
       
