@@ -69,11 +69,6 @@ const BonusGame = () => {
     if (isCorrect && !poppedCorrectBalloons.includes(id)) {
       const newPopped = [...poppedCorrectBalloons, id];
       setPoppedCorrectBalloons(newPopped);
-
-      const totalCorrect = currentRound?.balloons.filter(b => b.isCorrect).length || 0;
-      if (newPopped.length === totalCorrect) {
-        startNextRound();
-      }
     }
   };
 
