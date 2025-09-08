@@ -1,12 +1,14 @@
 "use client";
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PartyPopper } from 'lucide-react';
+import { PartyPopper, Trophy } from 'lucide-react';
 
 const EndScreen = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const score = location.state?.score;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-50 p-4">
@@ -19,6 +21,16 @@ const EndScreen = () => {
         </CardHeader>
         <CardContent>
           <p className="text-lg text-gray-700 mb-8">Great job playing!</p>
+
+          {score !== undefined && (
+            <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-md mb-8">
+              <div className="flex items-center justify-center gap-3">
+                <Trophy className="h-8 w-8" />
+                <p className="text-2xl font-bold">Your Score: {score}</p>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col space-y-4">
             <Button
               onClick={() => navigate('/game')}

@@ -50,8 +50,7 @@ const BonusGame = () => {
 
   const startRound = useCallback((index: number) => {
     if (index >= gameRounds.length) {
-      navigate('/end');
-      return;
+      return; // End of game is handled by the timer useEffect
     }
     setCurrentRound(gameRounds[index]);
     setRoundIndex(index);
@@ -60,7 +59,7 @@ const BonusGame = () => {
     setScore(0);
     setActiveBalloons([]);
     setNextBalloonId(0);
-  }, [gameRounds, navigate]);
+  }, [gameRounds]);
 
   useEffect(() => {
     if (!difficulty) navigate('/');
@@ -71,11 +70,15 @@ const BonusGame = () => {
     if (isCelebrating || !currentRound) return;
     if (timeLeft <= 0) {
       setIsCelebrating(true);
-      setTimeout(() => startRound(roundIndex + 1), 2500);
+      if (roundIndex + 1 >= gameRounds.length) {
+        setTimeout(() => navigate('/end', { state: { score } }), 2500);
+      } else {
+        setTimeout(() => startRound(roundIndex + 1), 2500);
+      }
     }
     const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, isCelebrating, currentRound, roundIndex, startRound]);
+  }, [timeLeft, isCelebrating, currentRound, roundIndex, startRound, gameRounds, navigate, score]);
 
   useEffect(() => {
     if (isCelebrating || !currentRound) return;
