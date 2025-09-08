@@ -12,14 +12,21 @@ export interface DragTheMissingWordChallenge {
   distractors: string[];
 }
 
+export interface PunctuationPickerChallenge {
+  sentence: string;
+  correctPunctuation: '.' | '?' | '!';
+}
+
 export interface GameData {
   age5: {
     clickPop: ClickPopChallenge[];
     dragTheMissingWord: DragTheMissingWordChallenge[];
+    punctuationPicker: PunctuationPickerChallenge[];
   };
   age7: {
     clickPop: ClickPopChallenge[];
     dragTheMissingWord: DragTheMissingWordChallenge[];
+    punctuationPicker: PunctuationPickerChallenge[];
   };
 }
 
@@ -59,6 +66,11 @@ export const gameData: GameData = {
         distractors: ["heavy", "car"],
       },
     ],
+    punctuationPicker: [
+        { sentence: "The dog is happy", correctPunctuation: '.' },
+        { sentence: "Look at the big bear", correctPunctuation: '!' },
+        { sentence: "Can a fish swim", correctPunctuation: '?' },
+    ],
   },
   age7: {
     clickPop: [
@@ -94,6 +106,11 @@ export const gameData: GameData = {
             correctWord: "swim",
             distractors: ["drive", "hot"],
         },
-    ]
+    ],
+    punctuationPicker: [
+        { sentence: "A giraffe is very tall", correctPunctuation: '.' },
+        { sentence: "Do monkeys eat bananas", correctPunctuation: '?' },
+        { sentence: "Wow, that lion is loud", correctPunctuation: '!' },
+    ],
   },
 };

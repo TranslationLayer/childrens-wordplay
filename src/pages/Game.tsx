@@ -6,6 +6,7 @@ import { useGame } from '@/contexts/GameContext';
 import GameTimer from '@/components/GameTimer';
 import ClickPop from '@/components/minigames/ClickPop';
 import DragTheMissingWord from '@/components/minigames/DragTheMissingWord';
+import PunctuationPicker from '@/components/minigames/PunctuationPicker';
 import Celebration from '@/components/Celebration';
 import { Progress } from '@/components/ui/progress';
 import { PawPrint } from 'lucide-react';
@@ -49,7 +50,7 @@ const Game = () => {
       case 1:
         return <DragTheMissingWord onComplete={handleMiniGameComplete} />;
       case 2:
-        return <div className="text-center"><p className="text-2xl mb-4">Punctuation Picker (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+        return <PunctuationPicker onComplete={handleMiniGameComplete} />;
       case 3:
         return <div className="text-center"><p className="text-2xl mb-4">Sentence Builder (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
       default:
