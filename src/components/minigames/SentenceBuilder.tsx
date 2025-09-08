@@ -7,7 +7,7 @@ import { useGame } from '@/contexts/GameContext';
 import { gameData, SentenceBuilderChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { sounds } from '@/lib/sounds';
 import { motion } from 'framer-motion';
 
@@ -16,27 +16,22 @@ interface SentenceBuilderProps {
 }
 
 const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
-  const { difficulty } = useGame();
-  const [challenges, setChallenges] = useState<SentenceBuilderChallenge[]>([]);
-  const [challengeIndex, setChallengeIndex] = useState(0);
+  const { difficulty, level } = useGame();
+  const [challenge, setChallenge] = useState<SentenceBuilderChallenge | null>(null);
   const [wordBank, setWordBank] = useState<string[]>([]);
   const [builtSentence, setBuiltSentence] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   useEffect(() => {
-    if (difficulty) {
-      const allChallenges = gameData[difficulty].sentenceBuilder;
-      setChallenges(shuffleArray(allChallenges).slice(0, 3));
-    }
-  }, [difficulty]);
-
-  useEffect(() => {
-    if (challenges.length > 0) {
-      setWordBank(shuffleArray(challenges[challengeIndex].words));
+    if (difficulty && level) {
+      const levelChallenges = gameData[difficulty][`level${level}`].sentenceBuilder;
+      const currentChallenge = shuffleArray(levelChallenges)[0];
+      setChallenge(currentChallenge);
+      setWordBank(shuffleArray(currentChallenge.words));
       setBuiltSentence([]);
       setFeedback(null);
     }
-  }, [challenges, challengeIndex]);
+  }, [difficulty, level]);
 
   const moveWordToSentence = (word: string, index: number) => {
     sounds.playClick();
@@ -51,16 +46,13 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
   };
 
   const checkSentence = () => {
-    const isCorrect = JSON.stringify(builtSentence) === JSON.stringify(challenges[challengeIndex].correctOrder);
+    if (!challenge) return;
+    const isCorrect = JSON.stringify(builtSentence) === JSON.stringify(challenge.correctOrder);
     if (isCorrect) {
       sounds.playCorrect();
       setFeedback('correct');
       setTimeout(() => {
-        if (challengeIndex < challenges.length - 1) {
-          setChallengeIndex(challengeIndex + 1);
-        } else {
-          onComplete();
-        }
+        onComplete();
       }, 1500);
     } else {
       sounds.playIncorrect();
@@ -69,7 +61,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
     }
   };
 
-  if (challenges.length === 0) return <div>Loading...</div>;
+  if (!challenge) return <div>Loading...</div>;
 
   return (
     <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">

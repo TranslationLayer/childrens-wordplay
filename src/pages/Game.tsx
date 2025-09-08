@@ -24,16 +24,16 @@ const gamePrompts = [
 ];
 
 const Game = () => {
-  const { difficulty } = useGame();
+  const { difficulty, level } = useGame();
   const navigate = useNavigate();
   const [currentMiniGame, setCurrentMiniGame] = useState(0);
   const [isCelebrating, setIsCelebrating] = useState(false);
 
   useEffect(() => {
-    if (!difficulty) {
+    if (!difficulty || !level) {
       navigate('/');
     }
-  }, [difficulty, navigate]);
+  }, [difficulty, level, navigate]);
 
   const handleMiniGameComplete = () => {
     sounds.playCelebration();
@@ -68,7 +68,7 @@ const Game = () => {
     }
   };
 
-  if (!difficulty) {
+  if (!difficulty || !level) {
     return null;
   }
 

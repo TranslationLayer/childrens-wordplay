@@ -16,19 +16,20 @@ interface PunctuationPickerProps {
 const punctuationOptions: ('.' | '?' | '!')[] = ['.', '?', '!'];
 
 const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => {
-  const { difficulty } = useGame();
-  const [challenges, setChallenges] = useState<PunctuationPickerChallenge[]>([]);
-  const [challengeIndex, setChallengeIndex] = useState(0);
+  const { difficulty, level } = useGame();
+  const [challenge, setChallenge] = useState<PunctuationPickerChallenge | null>(null);
   const [droppedPunctuation, setDroppedPunctuation] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   useEffect(() => {
-    if (difficulty) {
-      const allChallenges = gameData[difficulty].punctuationPicker;
-      setChallenges(shuffleArray(allChallenges).slice(0, 3));
+    if (difficulty && level) {
+      const levelChallenges = gameData[difficulty][`level${level}`].punctuationPicker;
+      setChallenge(shuffleArray(levelChallenges)[0]);
+      setDroppedPunctuation(null);
+      setFeedback(null);
     }
-  }, [difficulty]);
+  }, [difficulty, level]);
 
   const handleDragStart = (e: React.DragEvent<HTMLButtonElement>, mark: string) => {
     e.dataTransfer.setData('text/plain', mark);
@@ -37,21 +38,17 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDraggingOver(false);
+    if (!challenge) return;
+
     const dropped = e.dataTransfer.getData('text/plain');
-    const isCorrect = dropped === challenges[challengeIndex].correctPunctuation;
+    const isCorrect = dropped === challenge.correctPunctuation;
 
     if (isCorrect) {
       sounds.playCorrect();
       setDroppedPunctuation(dropped);
       setFeedback('correct');
       setTimeout(() => {
-        if (challengeIndex < challenges.length - 1) {
-          setChallengeIndex(challengeIndex + 1);
-          setDroppedPunctuation(null);
-          setFeedback(null);
-        } else {
-          onComplete();
-        }
+        onComplete();
       }, 1500);
     } else {
       sounds.playIncorrect();
@@ -60,9 +57,9 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
     }
   };
 
-  if (challenges.length === 0) return <div>Loading...</div>;
+  if (!challenge) return <div>Loading...</div>;
 
-  const { sentence } = challenges[challengeIndex];
+  const { sentence } = challenge;
 
   return (
     <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">

@@ -14,27 +14,23 @@ interface DragTheMissingWordProps {
 }
 
 const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) => {
-  const { difficulty } = useGame();
-  const [challenges, setChallenges] = useState<DragTheMissingWordChallenge[]>([]);
-  const [challengeIndex, setChallengeIndex] = useState(0);
+  const { difficulty, level } = useGame();
+  const [challenge, setChallenge] = useState<DragTheMissingWordChallenge | null>(null);
   const [wordOptions, setWordOptions] = useState<string[]>([]);
   const [droppedWord, setDroppedWord] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   useEffect(() => {
-    if (difficulty) {
-      const allChallenges = gameData[difficulty].dragTheMissingWord;
-      setChallenges(shuffleArray(allChallenges).slice(0, 3));
+    if (difficulty && level) {
+      const levelChallenges = gameData[difficulty][`level${level}`].dragTheMissingWord;
+      const currentChallenge = shuffleArray(levelChallenges)[0];
+      setChallenge(currentChallenge);
+      setWordOptions(shuffleArray([currentChallenge.correctWord, ...currentChallenge.distractors]));
+      setDroppedWord(null);
+      setFeedback(null);
     }
-  }, [difficulty]);
-
-  useEffect(() => {
-    if (challenges.length > 0) {
-      const current = challenges[challengeIndex];
-      setWordOptions(shuffleArray([current.correctWord, ...current.distractors]));
-    }
-  }, [challenges, challengeIndex]);
+  }, [difficulty, level]);
 
   const handleDragStart = (e: React.DragEvent<HTMLButtonElement>, word: string) => {
     e.dataTransfer.setData('text/plain', word);
@@ -43,21 +39,17 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDraggingOver(false);
+    if (!challenge) return;
+
     const dropped = e.dataTransfer.getData('text/plain');
-    const isCorrect = dropped === challenges[challengeIndex].correctWord;
+    const isCorrect = dropped === challenge.correctWord;
 
     if (isCorrect) {
       sounds.playCorrect();
       setDroppedWord(dropped);
       setFeedback('correct');
       setTimeout(() => {
-        if (challengeIndex < challenges.length - 1) {
-          setChallengeIndex(challengeIndex + 1);
-          setDroppedWord(null);
-          setFeedback(null);
-        } else {
-          onComplete();
-        }
+        onComplete();
       }, 1500);
     } else {
       sounds.playIncorrect();
@@ -66,9 +58,9 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
     }
   };
 
-  if (challenges.length === 0) return <div>Loading...</div>;
+  if (!challenge) return <div>Loading...</div>;
 
-  const { sentenceParts } = challenges[challengeIndex];
+  const { sentenceParts } = challenge;
 
   return (
     <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">

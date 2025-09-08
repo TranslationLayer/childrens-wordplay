@@ -13,25 +13,25 @@ interface ClickPopProps {
 }
 
 const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
-  const { difficulty } = useGame();
-  const [challengeIndex, setChallengeIndex] = useState(0);
-  const [challenges, setChallenges] = useState<ClickPopChallenge[]>([]);
+  const { difficulty, level } = useGame();
+  const [challenge, setChallenge] = useState<ClickPopChallenge | null>(null);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<'correct' | null>(null);
 
   useEffect(() => {
-    if (difficulty) {
-      const allChallenges = gameData[difficulty].clickPop;
-      setChallenges(shuffleArray(allChallenges).slice(0, 3));
+    if (difficulty && level) {
+      const levelChallenges = gameData[difficulty][`level${level}`].clickPop;
+      setChallenge(shuffleArray(levelChallenges)[0]);
+      setSelectedWords([]);
+      setFeedback(null);
     }
-  }, [difficulty]);
+  }, [difficulty, level]);
 
-  if (challenges.length === 0) {
+  if (!challenge) {
     return <div>Loading...</div>;
   }
 
-  const currentChallenge = challenges[challengeIndex];
-  const { prompt, words, correctWords } = currentChallenge;
+  const { prompt, words, correctWords } = challenge;
 
   const handleWordClick = (word: string) => {
     if (correctWords.includes(word) && !selectedWords.includes(word)) {
@@ -44,13 +44,7 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
       if (allCorrectFound) {
         setFeedback('correct');
         setTimeout(() => {
-          if (challengeIndex < challenges.length - 1) {
-            setChallengeIndex(challengeIndex + 1);
-            setSelectedWords([]);
-            setFeedback(null);
-          } else {
-            onComplete();
-          }
+          onComplete();
         }, 1500);
       }
     } else if (!correctWords.includes(word)) {

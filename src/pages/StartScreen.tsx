@@ -12,7 +12,7 @@ const StartScreen = () => {
 
   const handleDifficultySelect = (level: 'age5' | 'age7') => {
     setDifficulty(level);
-    navigate('/game');
+    navigate('/level-select');
   };
 
   return (
