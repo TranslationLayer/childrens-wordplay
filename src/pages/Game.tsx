@@ -1,13 +1,20 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '@/contexts/GameContext';
+import GameTimer from '@/components/GameTimer';
+import ClickPop from '@/components/minigames/ClickPop';
+import { Progress } from '@/components/ui/progress';
+import { PawPrint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
+const TOTAL_MINI_GAMES = 4;
 
 const Game = () => {
   const { difficulty } = useGame();
   const navigate = useNavigate();
+  const [currentMiniGame, setCurrentMiniGame] = useState(0);
 
   useEffect(() => {
     if (!difficulty) {
@@ -15,20 +22,49 @@ const Game = () => {
     }
   }, [difficulty, navigate]);
 
+  const handleMiniGameComplete = () => {
+    if (currentMiniGame < TOTAL_MINI_GAMES - 1) {
+      // TODO: Show celebration screen here later
+      setCurrentMiniGame(currentMiniGame + 1);
+    } else {
+      navigate('/end');
+    }
+  };
+
+  const renderMiniGame = () => {
+    switch (currentMiniGame) {
+      case 0:
+        return <ClickPop onComplete={handleMiniGameComplete} />;
+      case 1:
+        return <div className="text-center"><p className="text-2xl mb-4">Drag the Missing Word (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+      case 2:
+        return <div className="text-center"><p className="text-2xl mb-4">Punctuation Picker (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+      case 3:
+        return <div className="text-center"><p className="text-2xl mb-4">Sentence Builder (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+      default:
+        return null;
+    }
+  };
+
   if (!difficulty) {
-    return null; // or a loading spinner
+    return null;
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-blue-50 p-4">
-      <h1 className="text-4xl font-bold mb-4">Game Screen</h1>
-      <p className="text-2xl mb-8">
-        Difficulty: <span className="font-bold capitalize">{difficulty.replace('age', 'Age ')}</span>
-      </p>
-      <p className="text-lg mb-8">
-        (The 4 mini-games will go here)
-      </p>
-      <Button onClick={() => navigate('/end')}>End Game (For Testing)</Button>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-sky-100 p-4 relative">
+      <GameTimer />
+      <div className="w-full max-w-2xl mb-8 absolute top-5">
+        <div className="flex items-center justify-center gap-4 mb-2">
+            {[...Array(TOTAL_MINI_GAMES)].map((_, i) => (
+                <PawPrint key={i} className={`h-10 w-10 transition-colors ${i <= currentMiniGame ? 'text-yellow-500 fill-yellow-400' : 'text-gray-300'}`} />
+            ))}
+        </div>
+        <Progress value={((currentMiniGame) / TOTAL_MINI_GAMES) * 100} className="w-full h-4" />
+      </div>
+      
+      <div className="w-full flex-grow flex items-center justify-center">
+        {renderMiniGame()}
+      </div>
     </div>
   );
 };
