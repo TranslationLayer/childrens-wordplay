@@ -8,6 +8,8 @@ import { gameData, SentenceBuilderChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { sounds } from '@/lib/sounds';
+import { motion } from 'framer-motion';
 
 interface SentenceBuilderProps {
   onComplete: () => void;
@@ -37,11 +39,13 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
   }, [challenges, challengeIndex]);
 
   const moveWordToSentence = (word: string, index: number) => {
+    sounds.playClick();
     setWordBank(wordBank.filter((_, i) => i !== index));
     setBuiltSentence([...builtSentence, word]);
   };
 
   const moveWordToBank = (word: string, index: number) => {
+    sounds.playClick();
     setBuiltSentence(builtSentence.filter((_, i) => i !== index));
     setWordBank([...wordBank, word]);
   };
@@ -49,6 +53,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
   const checkSentence = () => {
     const isCorrect = JSON.stringify(builtSentence) === JSON.stringify(challenges[challengeIndex].correctOrder);
     if (isCorrect) {
+      sounds.playCorrect();
       setFeedback('correct');
       setTimeout(() => {
         if (challengeIndex < challenges.length - 1) {
@@ -58,6 +63,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
         }
       }, 1500);
     } else {
+      sounds.playIncorrect();
       setFeedback('incorrect');
       setTimeout(() => setFeedback(null), 1000);
     }
@@ -78,27 +84,28 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
           )}
         >
           {builtSentence.map((word, index) => (
-            <Button
+            <motion.button
               key={index}
-              variant="secondary"
-              className="h-16 text-3xl cursor-pointer"
+              layout
               onClick={() => moveWordToBank(word, index)}
+              className="h-16 px-6 text-3xl cursor-pointer bg-white rounded-lg shadow"
             >
               {word}
-            </Button>
+            </motion.button>
           ))}
           {feedback === 'correct' && <CheckCircle className="h-12 w-12 text-green-500" />}
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem]">
           {wordBank.map((word, index) => (
-            <Button
-              key={index}
-              className="h-16 text-3xl"
+            <motion.button
+              key={word + index}
+              layout
               onClick={() => moveWordToSentence(word, index)}
+              className="h-16 px-6 text-3xl bg-blue-500 text-white rounded-lg shadow"
             >
               {word}
-            </Button>
+            </motion.button>
           ))}
         </div>
 

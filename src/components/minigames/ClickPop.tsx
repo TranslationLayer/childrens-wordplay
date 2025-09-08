@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGame } from '@/contexts/GameContext';
 import { gameData, ClickPopChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { sounds } from '@/lib/sounds';
 
 interface ClickPopProps {
   onComplete: () => void;
@@ -34,10 +35,10 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
 
   const handleWordClick = (word: string) => {
     if (correctWords.includes(word) && !selectedWords.includes(word)) {
+      sounds.playCorrect();
       const newSelectedWords = [...selectedWords, word];
       setSelectedWords(newSelectedWords);
 
-      // Check if all correct words have been selected
       const allCorrectFound = correctWords.every(cw => newSelectedWords.includes(cw));
 
       if (allCorrectFound) {
@@ -52,6 +53,8 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
           }
         }, 1500);
       }
+    } else if (!correctWords.includes(word)) {
+      sounds.playIncorrect();
     }
   };
 
@@ -63,16 +66,18 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
       <CardContent>
         <div className="flex flex-wrap justify-center gap-4 mt-8">
           {words.map((word, index) => (
-            <Button
+            <motion.button
               key={index}
               onClick={() => handleWordClick(word)}
-              className={`h-20 w-40 text-3xl rounded-lg transition-transform transform hover:scale-105 ${
-                selectedWords.includes(word) ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`h-20 w-40 text-3xl rounded-lg font-bold text-white shadow-md transition-colors ${
+                selectedWords.includes(word) ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'
               }`}
               disabled={selectedWords.includes(word)}
             >
               {word}
-            </Button>
+            </motion.button>
           ))}
         </div>
         {feedback === 'correct' && (

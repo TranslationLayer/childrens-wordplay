@@ -9,10 +9,19 @@ import DragTheMissingWord from '@/components/minigames/DragTheMissingWord';
 import PunctuationPicker from '@/components/minigames/PunctuationPicker';
 import SentenceBuilder from '@/components/minigames/SentenceBuilder';
 import Celebration from '@/components/Celebration';
+import CharacterGuide from '@/components/CharacterGuide';
 import { Progress } from '@/components/ui/progress';
 import { PawPrint } from 'lucide-react';
+import { sounds } from '@/lib/sounds';
 
 const TOTAL_MINI_GAMES = 4;
+
+const gamePrompts = [
+  "Click the right words!",
+  "Drag the missing word to complete the sentence.",
+  "What punctuation mark is missing?",
+  "Let's build a sentence!",
+];
 
 const Game = () => {
   const { difficulty } = useGame();
@@ -27,6 +36,7 @@ const Game = () => {
   }, [difficulty, navigate]);
 
   const handleMiniGameComplete = () => {
+    sounds.playCelebration();
     if (currentMiniGame < TOTAL_MINI_GAMES - 1) {
       setIsCelebrating(true);
     } else {
@@ -63,8 +73,9 @@ const Game = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-sky-100 p-4 relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-sky-100 p-4 relative overflow-hidden">
       <GameTimer />
+      <CharacterGuide message={gamePrompts[currentMiniGame]} />
       <div className="w-full max-w-2xl mb-8 absolute top-5">
         <div className="flex items-center justify-center gap-4 mb-2">
             {[...Array(TOTAL_MINI_GAMES)].map((_, i) => (

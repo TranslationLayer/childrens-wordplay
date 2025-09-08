@@ -7,6 +7,7 @@ import { useGame } from '@/contexts/GameContext';
 import { gameData, DragTheMissingWordChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { sounds } from '@/lib/sounds';
 
 interface DragTheMissingWordProps {
   onComplete: () => void;
@@ -46,6 +47,7 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
     const isCorrect = dropped === challenges[challengeIndex].correctWord;
 
     if (isCorrect) {
+      sounds.playCorrect();
       setDroppedWord(dropped);
       setFeedback('correct');
       setTimeout(() => {
@@ -58,6 +60,7 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
         }
       }, 1500);
     } else {
+      sounds.playIncorrect();
       setFeedback('incorrect');
       setTimeout(() => setFeedback(null), 800); // Shake animation duration
     }

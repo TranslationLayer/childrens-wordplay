@@ -7,6 +7,7 @@ import { useGame } from '@/contexts/GameContext';
 import { gameData, PunctuationPickerChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { sounds } from '@/lib/sounds';
 
 interface PunctuationPickerProps {
   onComplete: () => void;
@@ -40,6 +41,7 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
     const isCorrect = dropped === challenges[challengeIndex].correctPunctuation;
 
     if (isCorrect) {
+      sounds.playCorrect();
       setDroppedPunctuation(dropped);
       setFeedback('correct');
       setTimeout(() => {
@@ -52,6 +54,7 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
         }
       }, 1500);
     } else {
+      sounds.playIncorrect();
       setFeedback('incorrect');
       setTimeout(() => setFeedback(null), 800);
     }

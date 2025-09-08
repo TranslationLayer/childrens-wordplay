@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { PartyPopper, Sparkles, ThumbsUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const celebrations = [
   { message: 'Awesome!', Icon: PartyPopper, color: 'text-purple-500' },
@@ -17,13 +18,8 @@ const Celebration: React.FC<CelebrationProps> = ({ onComplete }) => {
   const [celebration, setCelebration] = useState({ message: '', Icon: PartyPopper, color: '' });
 
   useEffect(() => {
-    // Pick a random celebration
     setCelebration(celebrations[Math.floor(Math.random() * celebrations.length)]);
-
-    const timer = setTimeout(() => {
-      onComplete();
-    }, 2000); // Show for 2 seconds
-
+    const timer = setTimeout(() => onComplete(), 2500);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -32,10 +28,16 @@ const Celebration: React.FC<CelebrationProps> = ({ onComplete }) => {
   if (!message) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 animate-bounce">
-      <Icon className={`h-24 w-24 ${color}`} />
-      <p className={`text-5xl font-bold ${color}`}>{message}</p>
-    </div>
+    <motion.div 
+      className="flex flex-col items-center justify-center gap-4"
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.5, opacity: 0 }}
+      transition={{ duration: 0.5, type: 'spring' }}
+    >
+      <Icon className={`h-32 w-32 ${color}`} />
+      <p className={`text-6xl font-bold ${color}`}>{message}</p>
+    </motion.div>
   );
 };
 
