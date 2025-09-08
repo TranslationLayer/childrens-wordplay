@@ -77,7 +77,7 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
         }
       }}
       whileHover={{ scale: 1.1 }}
-      onClick={handleClick}
+      onTap={handleClick}
     >
       <motion.div animate={isShaking ? shakeAnimation : swayAnimation}>
         <svg width="120" height="150" viewBox="0 0 100 125" className="drop-shadow-lg">
