@@ -40,12 +40,23 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
       transition: {
         duration: animationDuration,
         ease: 'linear',
+        onComplete: () => {
+          // Only remove if it hasn't been popped and has floated off screen
+          if (!isPopped) {
+            onAnimationComplete(id);
+          }
+        }
       },
     },
     popped: {
       scale: 1.5,
       opacity: 0,
-      transition: { duration: 0.3 },
+      transition: { 
+        duration: 0.3,
+        onComplete: () => {
+          onAnimationComplete(id);
+        }
+      },
     },
   };
 
@@ -71,11 +82,6 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
       variants={balloonVariants}
       initial="hidden"
       animate={isPopped ? 'popped' : 'visible'}
-      onAnimationComplete={(definition) => {
-        if (definition === 'popped' || definition === 'visible') {
-          onAnimationComplete(id);
-        }
-      }}
       whileHover={{ scale: 1.1 }}
       onTap={handleClick}
     >
