@@ -34,10 +34,9 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
   };
 
   const balloonVariants = {
-    hidden: { y: '110vh', x: `${initialX}vw`, scale: 1 },
+    hidden: { y: '110vh', scale: 1 },
     visible: {
       y: '-20vh',
-      x: `${initialX + Math.random() * 10 - 5}vw`, // Gentle sway
       transition: {
         duration: animationDuration,
         ease: 'linear',
@@ -50,12 +49,25 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
     },
   };
 
-  const shakeAnimation = isShaking ? { x: [0, -5, 5, -5, 5, 0], transition: { duration: 0.5 } } : {};
+  const shakeAnimation = { 
+    x: [0, -5, 5, -5, 5, 0], 
+    transition: { duration: 0.5 } 
+  };
+
+  const swayAnimation = {
+    x: [0, 10, -10, 5, -5, 0],
+    transition: {
+      duration: 5 + Math.random() * 5,
+      repeat: Infinity,
+      repeatType: 'mirror',
+      ease: 'easeInOut',
+    }
+  };
 
   return (
     <motion.div
       className="absolute cursor-pointer"
-      style={{ left: `${initialX}vw` }}
+      style={{ left: `${initialX}%`, transform: 'translateX(-50%)' }}
       variants={balloonVariants}
       initial="hidden"
       animate={isPopped ? 'popped' : 'visible'}
@@ -67,7 +79,7 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
       whileHover={{ scale: 1.1 }}
       onClick={handleClick}
     >
-      <motion.div animate={shakeAnimation}>
+      <motion.div animate={isShaking ? shakeAnimation : swayAnimation}>
         <svg width="120" height="150" viewBox="0 0 100 125" className="drop-shadow-lg">
           <path
             d="M50,115 C10,100 10,50 50,10 C90,50 90,100 50,115 Z"

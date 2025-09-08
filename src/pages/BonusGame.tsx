@@ -84,7 +84,7 @@ const BonusGame = () => {
       const newBalloon: ActiveBalloon = {
         ...balloonTemplate,
         id: nextBalloonId,
-        initialX: Math.random() * 85 + 5,
+        initialX: Math.random() * 90 + 5, // Percentage from 5% to 95%
         animationDuration: difficulty === 'age5' ? 10 + Math.random() * 5 : 7 + Math.random() * 4,
         color: getBalloonColor(balloonTemplate.content, currentRound.type),
       };
@@ -130,19 +130,21 @@ const BonusGame = () => {
         </div>
       </div>
 
-      {activeBalloons.map((balloon) => (
-        <Balloon
-          key={balloon.id}
-          id={balloon.id}
-          content={currentRound.type === 'color' ? '' : balloon.content}
-          color={balloon.color}
-          isCorrect={balloon.isCorrect}
-          onPop={handleBalloonPop}
-          initialX={balloon.initialX}
-          animationDuration={balloon.animationDuration}
-          onAnimationComplete={handleAnimationComplete}
-        />
-      ))}
+      <div className="absolute inset-0 max-w-7xl mx-auto h-full w-full">
+        {activeBalloons.map((balloon) => (
+          <Balloon
+            key={balloon.id}
+            id={balloon.id}
+            content={currentRound.type === 'color' ? '' : balloon.content}
+            color={balloon.color}
+            isCorrect={balloon.isCorrect}
+            onPop={handleBalloonPop}
+            initialX={balloon.initialX}
+            animationDuration={balloon.animationDuration}
+            onAnimationComplete={handleAnimationComplete}
+          />
+        ))}
+      </div>
     </div>
   );
 };
