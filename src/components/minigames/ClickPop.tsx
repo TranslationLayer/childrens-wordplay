@@ -63,8 +63,8 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">{prompt}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap justify-center gap-4 mt-8 relative">
-          {showHint && <InstructionAnimation type="click" className="top-10" />}
+        {showHint && <InstructionAnimation type="click" />}
+        <div className="flex flex-wrap justify-center gap-4 mt-8">
           {words.map((word, index) => (
             <motion.button
               key={index}

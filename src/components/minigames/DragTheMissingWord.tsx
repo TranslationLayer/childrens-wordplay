@@ -72,8 +72,8 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
       <CardHeader>
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Drag the missing word</CardTitle>
       </CardHeader>
-      <CardContent className="relative">
-        {showHint && <InstructionAnimation type="drag" className="-top-4" />}
+      <CardContent>
+        {showHint && <InstructionAnimation type="drag" />}
         <div className="flex items-center justify-center text-4xl font-serif bg-gray-100 p-8 rounded-lg my-8 h-32">
           <span>{sentenceParts[0]}&nbsp;</span>
           <div

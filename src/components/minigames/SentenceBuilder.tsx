@@ -74,6 +74,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Build the sentence</CardTitle>
       </CardHeader>
       <CardContent>
+        {showHint && <InstructionAnimation type="click" />}
         <div
           className={cn(
             'flex items-center justify-center text-3xl font-serif bg-gray-100 p-4 rounded-lg my-8 min-h-[8rem] flex-wrap gap-4',
@@ -93,8 +94,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
           {feedback === 'correct' && <CheckCircle className="h-12 w-12 text-green-500" />}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem] relative">
-          {showHint && <InstructionAnimation type="click" className="top-8" />}
+        <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem]">
           {wordBank.map((word, index) => (
             <motion.button
               key={word + index}
