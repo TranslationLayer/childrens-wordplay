@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '@/contexts/GameContext';
 import GameTimer from '@/components/GameTimer';
 import ClickPop from '@/components/minigames/ClickPop';
+import DragTheMissingWord from '@/components/minigames/DragTheMissingWord';
+import Celebration from '@/components/Celebration';
 import { Progress } from '@/components/ui/progress';
 import { PawPrint } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,6 +17,7 @@ const Game = () => {
   const { difficulty } = useGame();
   const navigate = useNavigate();
   const [currentMiniGame, setCurrentMiniGame] = useState(0);
+  const [isCelebrating, setIsCelebrating] = useState(false);
 
   useEffect(() => {
     if (!difficulty) {
@@ -24,19 +27,27 @@ const Game = () => {
 
   const handleMiniGameComplete = () => {
     if (currentMiniGame < TOTAL_MINI_GAMES - 1) {
-      // TODO: Show celebration screen here later
-      setCurrentMiniGame(currentMiniGame + 1);
+      setIsCelebrating(true);
     } else {
       navigate('/end');
     }
   };
+  
+  const handleCelebrationComplete = () => {
+      setIsCelebrating(false);
+      setCurrentMiniGame(currentMiniGame + 1);
+  }
 
-  const renderMiniGame = () => {
+  const renderContent = () => {
+    if (isCelebrating) {
+        return <Celebration onComplete={handleCelebrationComplete} />;
+    }
+
     switch (currentMiniGame) {
       case 0:
         return <ClickPop onComplete={handleMiniGameComplete} />;
       case 1:
-        return <div className="text-center"><p className="text-2xl mb-4">Drag the Missing Word (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+        return <DragTheMissingWord onComplete={handleMiniGameComplete} />;
       case 2:
         return <div className="text-center"><p className="text-2xl mb-4">Punctuation Picker (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
       case 3:
@@ -63,7 +74,7 @@ const Game = () => {
       </div>
       
       <div className="w-full flex-grow flex items-center justify-center">
-        {renderMiniGame()}
+        {renderContent()}
       </div>
     </div>
   );

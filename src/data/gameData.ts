@@ -6,12 +6,20 @@ export interface ClickPopChallenge {
   correctWords: string[];
 }
 
+export interface DragTheMissingWordChallenge {
+  sentenceParts: [string, string];
+  correctWord: string;
+  distractors: string[];
+}
+
 export interface GameData {
   age5: {
     clickPop: ClickPopChallenge[];
+    dragTheMissingWord: DragTheMissingWordChallenge[];
   };
   age7: {
     clickPop: ClickPopChallenge[];
+    dragTheMissingWord: DragTheMissingWordChallenge[];
   };
 }
 
@@ -34,6 +42,23 @@ export const gameData: GameData = {
         correctWords: ["A"],
       },
     ],
+    dragTheMissingWord: [
+      {
+        sentenceParts: ["The", "dog runs."],
+        correctWord: "brown",
+        distractors: ["table", "quick"],
+      },
+      {
+        sentenceParts: ["A cat can", "."],
+        correctWord: "jump",
+        distractors: ["sing", "blue"],
+      },
+      {
+        sentenceParts: ["That is a", "bird."],
+        correctWord: "small",
+        distractors: ["heavy", "car"],
+      },
+    ],
   },
   age7: {
     clickPop: [
@@ -53,5 +78,22 @@ export const gameData: GameData = {
         correctWords: ["tiger", "giraffe"],
       },
     ],
+    dragTheMissingWord: [
+        {
+            sentenceParts: ["The striped", "is fast."],
+            correctWord: "zebra",
+            distractors: ["house", "slowly"],
+        },
+        {
+            sentenceParts: ["A big elephant", "water."],
+            correctWord: "drinks",
+            distractors: ["flies", "purple"],
+        },
+        {
+            sentenceParts: ["Can a penguin", "?"],
+            correctWord: "swim",
+            distractors: ["drive", "hot"],
+        },
+    ]
   },
 };
