@@ -8,6 +8,7 @@ import { gameData, DragTheMissingWordChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { sounds } from '@/lib/sounds';
+import InstructionAnimation from '@/components/InstructionAnimation';
 
 interface DragTheMissingWordProps {
   onComplete: () => void;
@@ -20,6 +21,7 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
   const [droppedWord, setDroppedWord] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (difficulty && level) {
@@ -29,6 +31,9 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
       setWordOptions(shuffleArray([currentChallenge.correctWord, ...currentChallenge.distractors]));
       setDroppedWord(null);
       setFeedback(null);
+      setShowHint(true);
+      const timer = setTimeout(() => setShowHint(false), 5000);
+      return () => clearTimeout(timer);
     }
   }, [difficulty, level]);
 
@@ -67,7 +72,8 @@ const DragTheMissingWord: React.FC<DragTheMissingWordProps> = ({ onComplete }) =
       <CardHeader>
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Drag the missing word</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
+        {showHint && <InstructionAnimation type="drag" className="-top-4" />}
         <div className="flex items-center justify-center text-4xl font-serif bg-gray-100 p-8 rounded-lg my-8 h-32">
           <span>{sentenceParts[0]}&nbsp;</span>
           <div

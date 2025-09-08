@@ -7,6 +7,7 @@ import { gameData, ClickPopChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { sounds } from '@/lib/sounds';
+import InstructionAnimation from '@/components/InstructionAnimation';
 
 interface ClickPopProps {
   onComplete: () => void;
@@ -17,6 +18,7 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
   const [challenge, setChallenge] = useState<ClickPopChallenge | null>(null);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<'correct' | null>(null);
+  const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (difficulty && level) {
@@ -24,6 +26,9 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
       setChallenge(shuffleArray(levelChallenges)[0]);
       setSelectedWords([]);
       setFeedback(null);
+      setShowHint(true);
+      const timer = setTimeout(() => setShowHint(false), 4000);
+      return () => clearTimeout(timer);
     }
   }, [difficulty, level]);
 
@@ -58,7 +63,8 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">{prompt}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
+        <div className="flex flex-wrap justify-center gap-4 mt-8 relative">
+          {showHint && <InstructionAnimation type="click" className="top-10" />}
           {words.map((word, index) => (
             <motion.button
               key={index}

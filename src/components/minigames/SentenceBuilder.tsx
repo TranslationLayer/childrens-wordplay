@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { CheckCircle } from 'lucide-react';
 import { sounds } from '@/lib/sounds';
 import { motion } from 'framer-motion';
+import InstructionAnimation from '@/components/InstructionAnimation';
 
 interface SentenceBuilderProps {
   onComplete: () => void;
@@ -21,6 +22,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
   const [wordBank, setWordBank] = useState<string[]>([]);
   const [builtSentence, setBuiltSentence] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (difficulty && level) {
@@ -30,6 +32,9 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
       setWordBank(shuffleArray(currentChallenge.words));
       setBuiltSentence([]);
       setFeedback(null);
+      setShowHint(true);
+      const timer = setTimeout(() => setShowHint(false), 4000);
+      return () => clearTimeout(timer);
     }
   }, [difficulty, level]);
 
@@ -88,7 +93,8 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
           {feedback === 'correct' && <CheckCircle className="h-12 w-12 text-green-500" />}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem]">
+        <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem] relative">
+          {showHint && <InstructionAnimation type="click" className="top-8" />}
           {wordBank.map((word, index) => (
             <motion.button
               key={word + index}

@@ -8,6 +8,7 @@ import { gameData, PunctuationPickerChallenge } from '@/data/gameData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { sounds } from '@/lib/sounds';
+import InstructionAnimation from '@/components/InstructionAnimation';
 
 interface PunctuationPickerProps {
   onComplete: () => void;
@@ -21,6 +22,7 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
   const [droppedPunctuation, setDroppedPunctuation] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [showHint, setShowHint] = useState(true);
 
   useEffect(() => {
     if (difficulty && level) {
@@ -28,6 +30,9 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
       setChallenge(shuffleArray(levelChallenges)[0]);
       setDroppedPunctuation(null);
       setFeedback(null);
+      setShowHint(true);
+      const timer = setTimeout(() => setShowHint(false), 5000);
+      return () => clearTimeout(timer);
     }
   }, [difficulty, level]);
 
@@ -66,7 +71,8 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
       <CardHeader>
         <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Add the right punctuation</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative">
+        {showHint && <InstructionAnimation type="drag" className="-top-4" />}
         <div className="flex items-center justify-center text-4xl font-serif bg-gray-100 p-8 rounded-lg my-8 h-32">
           <span>{sentence}</span>
           <div
