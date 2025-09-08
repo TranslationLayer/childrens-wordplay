@@ -7,10 +7,10 @@ import GameTimer from '@/components/GameTimer';
 import ClickPop from '@/components/minigames/ClickPop';
 import DragTheMissingWord from '@/components/minigames/DragTheMissingWord';
 import PunctuationPicker from '@/components/minigames/PunctuationPicker';
+import SentenceBuilder from '@/components/minigames/SentenceBuilder';
 import Celebration from '@/components/Celebration';
 import { Progress } from '@/components/ui/progress';
 import { PawPrint } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const TOTAL_MINI_GAMES = 4;
 
@@ -52,7 +52,7 @@ const Game = () => {
       case 2:
         return <PunctuationPicker onComplete={handleMiniGameComplete} />;
       case 3:
-        return <div className="text-center"><p className="text-2xl mb-4">Sentence Builder (Coming Soon)</p><Button onClick={handleMiniGameComplete}>Next Game (For Testing)</Button></div>;
+        return <SentenceBuilder onComplete={handleMiniGameComplete} />;
       default:
         return null;
     }

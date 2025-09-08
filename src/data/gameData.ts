@@ -17,16 +17,23 @@ export interface PunctuationPickerChallenge {
   correctPunctuation: '.' | '?' | '!';
 }
 
+export interface SentenceBuilderChallenge {
+  words: string[];
+  correctOrder: string[];
+}
+
 export interface GameData {
   age5: {
     clickPop: ClickPopChallenge[];
     dragTheMissingWord: DragTheMissingWordChallenge[];
     punctuationPicker: PunctuationPickerChallenge[];
+    sentenceBuilder: SentenceBuilderChallenge[];
   };
   age7: {
     clickPop: ClickPopChallenge[];
     dragTheMissingWord: DragTheMissingWordChallenge[];
     punctuationPicker: PunctuationPickerChallenge[];
+    sentenceBuilder: SentenceBuilderChallenge[];
   };
 }
 
@@ -71,6 +78,11 @@ export const gameData: GameData = {
         { sentence: "Look at the big bear", correctPunctuation: '!' },
         { sentence: "Can a fish swim", correctPunctuation: '?' },
     ],
+    sentenceBuilder: [
+      { words: ["cat", "The", "sat"], correctOrder: ["The", "cat", "sat"] },
+      { words: ["runs", "dog", "A"], correctOrder: ["A", "dog", "runs"] },
+      { words: ["is", "The", "big", "sun"], correctOrder: ["The", "sun", "is", "big"] },
+    ],
   },
   age7: {
     clickPop: [
@@ -111,6 +123,11 @@ export const gameData: GameData = {
         { sentence: "A giraffe is very tall", correctPunctuation: '.' },
         { sentence: "Do monkeys eat bananas", correctPunctuation: '?' },
         { sentence: "Wow, that lion is loud", correctPunctuation: '!' },
+    ],
+    sentenceBuilder: [
+      { words: ["fox", "The", "jumps", "quick"], correctOrder: ["The", "quick", "fox", "jumps"] },
+      { words: ["loudly", "roars", "A", "lion"], correctOrder: ["A", "lion", "roars", "loudly"] },
+      { words: ["fish", "The", "in", "swims", "water"], correctOrder: ["The", "fish", "swims", "in", "water"] },
     ],
   },
 };
