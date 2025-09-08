@@ -12,9 +12,10 @@ interface BalloonProps {
   onPop: (id: number, isCorrect: boolean) => void;
   initialX: number;
   animationDuration: number;
+  onAnimationComplete: (id: number) => void;
 }
 
-const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop, initialX, animationDuration }) => {
+const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop, initialX, animationDuration, onAnimationComplete }) => {
   const [isPopped, setIsPopped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
 
@@ -58,6 +59,11 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
       variants={balloonVariants}
       initial="hidden"
       animate={isPopped ? 'popped' : 'visible'}
+      onAnimationComplete={(definition) => {
+        if (definition === 'popped' || definition === 'visible') {
+          onAnimationComplete(id);
+        }
+      }}
       whileHover={{ scale: 1.1 }}
       onClick={handleClick}
     >
