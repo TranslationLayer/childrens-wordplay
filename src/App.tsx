@@ -11,6 +11,7 @@ import Game from "./pages/Game";
 import EndScreen from "./pages/EndScreen";
 import NotFound from "./pages/NotFound";
 import { GameProvider } from "./contexts/GameContext";
+import BonusGame from "./pages/BonusGame";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/" element={<StartScreen />} />
             <Route path="/level-select" element={<LevelSelect />} />
             <Route path="/game" element={<Game />} />
+            <Route path="/bonus-game" element={<BonusGame />} />
             <Route path="/end" element={<EndScreen />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
