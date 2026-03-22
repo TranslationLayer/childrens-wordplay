@@ -58,10 +58,10 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
   };
 
   useEffect(() => {
-    // This promise resolves when the animation completes (floats off-screen)
     controls.start('visible').then(() => {
       if (!isPopped) {
-        onAnimationComplete(id);
+        setIsPopped(true);
+        setTimeout(() => onAnimationComplete(id), 1200);
       }
     });
   }, [controls, id, isPopped, onAnimationComplete]);
