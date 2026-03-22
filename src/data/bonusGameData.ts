@@ -47,6 +47,20 @@ export const bonusGameData: BonusGameData = {
       ]
     },
     {
+      prompt: "Pop all the pink balloons.",
+      type: 'color',
+      balloons: [
+        { content: 'pink', isCorrect: true }, { content: 'blue', isCorrect: false },
+        { content: 'pink', isCorrect: true }, { content: 'green', isCorrect: false },
+        { content: 'yellow', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'red', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'purple', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'blue', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'green', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'yellow', isCorrect: false },
+      ]
+    },
+    {
       prompt: "Pop all the balloons with the letter A.",
       type: 'letter',
       balloons: [
@@ -92,6 +106,20 @@ export const bonusGameData: BonusGameData = {
         { content: 'that', isCorrect: false }, { content: 'the', isCorrect: true },
         { content: 'with', isCorrect: false }, { content: 'as', isCorrect: false },
         { content: 'I', isCorrect: false }, { content: 'the', isCorrect: true },
+      ]
+    },
+    {
+      prompt: "Pop all the pink balloons.",
+      type: 'color',
+      balloons: [
+        { content: 'pink', isCorrect: true }, { content: 'blue', isCorrect: false },
+        { content: 'pink', isCorrect: true }, { content: 'green', isCorrect: false },
+        { content: 'yellow', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'red', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'purple', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'blue', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'green', isCorrect: false }, { content: 'pink', isCorrect: true },
+        { content: 'yellow', isCorrect: false },
       ]
     },
     {
