@@ -49,7 +49,7 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
   const balloonVariants = {
     hidden: { y: '110vh', scale: 1 },
     visible: {
-      y: '-20vh',
+      y: '-75px',
       transition: {
         duration: animationDuration,
         ease: 'linear',
