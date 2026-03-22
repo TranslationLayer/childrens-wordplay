@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import { sounds } from '@/lib/sounds';
 
@@ -45,6 +45,9 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
   const [isPopped, setIsPopped] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const controls = useAnimationControls();
+  const isPoppedRef = useRef(false);
+  const onAnimationCompleteRef = useRef(onAnimationComplete);
+  onAnimationCompleteRef.current = onAnimationComplete;
 
   const balloonVariants = {
     hidden: { y: '110vh', scale: 1 },
@@ -59,21 +62,23 @@ const Balloon: React.FC<BalloonProps> = ({ id, content, color, isCorrect, onPop,
 
   useEffect(() => {
     controls.start('visible').then(() => {
-      if (!isPopped) {
+      if (!isPoppedRef.current) {
+        isPoppedRef.current = true;
         setIsPopped(true);
-        setTimeout(() => onAnimationComplete(id), 1200);
+        setTimeout(() => onAnimationCompleteRef.current(id), 1200);
       }
     });
-  }, [controls, id, isPopped, onAnimationComplete]);
+  }, [controls, id]);
 
   const handleClick = () => {
-    if (isPopped) return;
+    if (isPoppedRef.current) return;
 
     if (isCorrect) {
       sounds.playCorrect();
-      controls.stop(); // Stop the balloon from moving
+      controls.stop();
+      isPoppedRef.current = true;
       setIsPopped(true);
-      setTimeout(() => onAnimationComplete(id), 1200); // Clean up after confetti
+      setTimeout(() => onAnimationCompleteRef.current(id), 1200);
     } else {
       sounds.playIncorrect();
       setIsShaking(true);
