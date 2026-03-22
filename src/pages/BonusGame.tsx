@@ -12,7 +12,7 @@ import { shuffleArray } from '@/lib/utils';
 import { Trophy } from 'lucide-react';
 
 const ROUND_DURATION_SECONDS = 60;
-const balloonColors = ['#EF4444', '#3B82F6', '#22C55E', '#FBBF24', '#A855F7'];
+const balloonColors = ['#EF4444', '#3B82F6', '#22C55E', '#FBBF24', '#A855F7', '#EC4899'];
 
 interface ActiveBalloon extends BalloonData {
   id: number;
@@ -41,7 +41,7 @@ const BonusGame = () => {
     if (type === 'color') {
       const colorMap: { [key: string]: string } = {
         red: '#EF4444', blue: '#3B82F6', green: '#22C55E',
-        yellow: '#FBBF24', purple: '#A855F7',
+        yellow: '#FBBF24', purple: '#A855F7', pink: '#EC4899',
       };
       return colorMap[content] || balloonColors[Math.floor(Math.random() * balloonColors.length)];
     }
