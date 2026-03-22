@@ -59,6 +59,24 @@ const LevelSelect = () => {
             >
               Level 3 <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" />
             </Button>
+            <Button
+              onClick={() => handleLevelSelect(4)}
+              className="h-20 text-3xl font-bold bg-amber-500 hover:bg-amber-600 flex items-center justify-center gap-2"
+            >
+              Level 4 <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" />
+            </Button>
+            <Button
+              onClick={() => handleLevelSelect(5)}
+              className="h-20 text-3xl font-bold bg-orange-500 hover:bg-orange-600 flex items-center justify-center gap-2"
+            >
+              Level 5 <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" />
+            </Button>
+            <Button
+              onClick={() => handleLevelSelect(6)}
+              className="h-20 text-3xl font-bold bg-rose-500 hover:bg-rose-600 flex items-center justify-center gap-2"
+            >
+              Level 6 <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" /> <Star className="h-8 w-8" />
+            </Button>
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
