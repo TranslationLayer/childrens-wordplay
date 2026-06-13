@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import Celebration from '@/components/Celebration';
 import StartOverButton from '@/components/StartOverButton';
 import { shuffleArray } from '@/lib/utils';
+import { DIFFICULTIES } from '@/data/difficulties';
 import { Trophy } from 'lucide-react';
 
 const ROUND_DURATION_SECONDS = 60;
@@ -36,6 +37,11 @@ const BonusGame = () => {
     if (!difficulty) return [];
     return shuffleArray(bonusGameData[difficulty]);
   }, [difficulty]);
+
+  // Pace 1 (calmest) → 4 (fastest) drives how quickly balloons appear and rise.
+  const pace = difficulty ? DIFFICULTIES[difficulty].pace : 1;
+  const spawnIntervalMs = 1400 - pace * 200; // 1200ms (pace 1) → 600ms (pace 4)
+  const floatBaseSeconds = 12 - pace * 1.5; // ~10.5s (pace 1) → 6s (pace 4)
 
   const getBalloonColor = useCallback((content: string, type: BonusRound['type']) => {
     if (type === 'color') {
@@ -88,14 +94,14 @@ const BonusGame = () => {
         ...balloonTemplate,
         id: nextBalloonId,
         initialX: Math.random() * 90 + 5, // Percentage from 5% to 95%
-        animationDuration: difficulty === 'age5' ? 10 + Math.random() * 5 : 7 + Math.random() * 4,
+        animationDuration: floatBaseSeconds + Math.random() * 4,
         color: getBalloonColor(balloonTemplate.content, currentRound.type),
       };
       setNextBalloonId(prev => prev + 1);
       setActiveBalloons(prev => [...prev, newBalloon]);
-    }, difficulty === 'age5' ? 1200 : 800);
+    }, spawnIntervalMs);
     return () => clearInterval(interval);
-  }, [nextBalloonId, currentRound, isCelebrating, difficulty, getBalloonColor]);
+  }, [nextBalloonId, currentRound, isCelebrating, spawnIntervalMs, floatBaseSeconds, getBalloonColor]);
 
   const handleBalloonPop = (id: number, isCorrect: boolean) => {
     if (isCorrect) {

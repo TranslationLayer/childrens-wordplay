@@ -1,8 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-type Difficulty = 'age5' | 'age7';
+import type { Difficulty } from '@/data/difficulties';
 
 interface GameContextType {
   difficulty: Difficulty | null;

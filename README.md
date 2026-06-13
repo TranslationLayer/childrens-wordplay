@@ -1,45 +1,71 @@
-# Animal Sentence Fun! 🐾
+# Animal Word Fun! 🐾
 
-An interactive word game for early readers that makes learning grammar fun through drag-and-drop challenges, balloon popping, and sentence building. Designed for children aged 5–7.
+An interactive literacy playground for early readers (roughly ages **5–8**) that makes learning to read and write fun through drag-and-drop challenges, balloon popping, sentence building, crosswords, word searches, rhyming, and memory games.
+
+---
+
+## Who It's For
+
+Children aged 5–8 are at wildly different reading stages, and the same child reads at different levels on different days. So instead of one-size-fits-all, the app offers:
+
+- A **standard track for each age**: 5, 6, 7, and 8.
+- Two **Advanced tracks** — one for the **5–6** range and one for the **7–8** range — for children who are reading ahead and want extra-tricky words, longer sentences, and faster games.
+
+Everything is built for little fingers and developing eyes: big tap targets, large fonts, picture (emoji) hints, friendly sounds, and a guide character. A note on the start screen reminds grown-ups to **pick the age that fits the child's reading, not just their birthday**.
 
 ---
 
 ## What It Is
 
-Animal Sentence Fun! is a browser-based literacy game with two difficulty tracks — one tuned for 5-year-olds and one for 7-year-olds. Players work through 6 levels of increasing difficulty, each containing four different mini-games that cover word recognition, punctuation, vocabulary, and sentence structure. A separate Bonus Game offers a fast-paced balloon-popping mode for extra practice.
+A browser-based literacy game. After choosing an age (and optionally Advanced mode), players land on a **game hub** with six activities. The flagship **Sentence Adventure** runs 6 colour-coded levels of four mini-games each; the rest are pick-up-and-play puzzles and games.
 
 ---
 
 ## How to Play
 
-### 1. Pick Your Age Group
-On the start screen, choose **Age 5** or **Age 7**. This sets the vocabulary difficulty and game speed throughout the entire session.
+### 1. Pick Your Age
+On the start screen, tap **Age 5, 6, 7, or 8**. Flip on **Advanced mode** first for the extra-tricky version of your range. This sets the vocabulary difficulty and game speed for the whole session (and is remembered between visits).
 
-### 2. Choose a Level
-Six levels are available, colour-coded by difficulty (cyan → teal → emerald → amber → orange → rose). Higher levels introduce more complex grammar concepts and longer sentences.
+### 2. Pick a Game
+The hub offers six activities: **Sentence Adventure**, **Balloon Pop**, **Crossword**, **Word Search**, **Rhyme Time**, and **Memory Match**.
 
-### 3. Play Four Mini-Games
-Each level runs through four mini-games in sequence, with a celebration screen between each one.
+### 3. Play
+Sentence Adventure runs four mini-games per level with a celebration between each. The puzzles and games each end with a celebration when completed.
 
 ---
 
-## Mini-Games
+## Games
 
-### Click Pop
+### Sentence Adventure
+Six colour-coded levels (cyan → teal → emerald → amber → orange → rose), each running through four mini-games in sequence. Higher levels introduce more complex grammar and longer sentences.
+
+#### Click Pop
 A grid of words appears on screen. Tap all the words that match the prompt — for example, "Click the animal words" or "Click the describing words." Words glow green when correctly selected.
 
-### Drag the Missing Word
+#### Drag the Missing Word
 A sentence is shown with one word missing. Three word tiles appear below — drag the correct one into the blank. The sentence completes and a success sound plays. Wrong answers shake and play an error sound.
 
-### Punctuation Picker
+#### Punctuation Picker
 A sentence needs its final punctuation. Three large circular buttons show `.` `?` and `!` — drag the right one into the drop zone at the end of the sentence.
 
-### Sentence Builder
+#### Sentence Builder
 A scrambled set of word tiles appears at the bottom of the screen. Tap words in the correct order to build the sentence in the area above. When all words are placed, hit **Check My Sentence!** to verify.
+
+### Crossword
+A big-letter crossword built from a spine word with shorter words branching off it. Each clue has a **picture (emoji) hint** and shows the word length, so young readers always have a way in. Type into the large cells and hit **Check** — correct letters turn green, wrong ones shake. Puzzles scale by age range (3 words for the youngest, up to a 5×5 grid for ages 8+).
+
+### Word Search
+Drag (or swipe on touch) across a grid of big letters to find the hidden animal words. Found words highlight green and strike through on the list. The grid grows and the search gets harder by range: 6×6 horizontal/vertical for the youngest, up to a 10×10 grid with diagonal **and** backwards words for ages 8+.
+
+### Rhyme Time
+A picture and a word appear ("Which word rhymes with 🐍 SNAKE?"). Tap the rhyming option from three big buttons. Wrong picks shake; correct picks advance through several rounds, getting trickier with age.
+
+### Memory Match
+A classic flip-and-match game where each pair is a **word and its matching picture** (e.g. the card `FROG` matches 🐸). Flip two cards to find a pair. 4 pairs for the youngest, up to 6 for ages 8+.
 
 ---
 
-## Bonus Game
+## Balloon Pop (Bonus)
 
 A timed balloon-popping mode. Balloons float up from the bottom of the screen — tap the ones that match the current round's challenge before they escape. Each correct pop scores a point. Rounds last 60 seconds and vary by challenge type:
 
@@ -55,27 +81,20 @@ Balloons that reach the top pop on their own. Incorrect pops shake but don't cou
 
 ---
 
-## Learning Progression
+## Tracks & Learning Progression
 
-### Age 5
-| Level | Concepts |
-|---|---|
-| 1 | Animal words, basic sentence structure, periods |
-| 2 | Capitalisation, adjectives, exclamation marks |
-| 3 | Small words (articles/pronouns), question marks |
-| 4 | Describing words (adjectives), 5-word sentences |
-| 5 | Things (nouns), 6-word sentences |
-| 6 | Action words (verbs), complex sentence building |
+Each track sets the vocabulary, sentence length, and game pace (balloons appear and rise faster on older/advanced tracks).
 
-### Age 7
-| Level | Concepts |
-|---|---|
-| 1 | Action words (verbs), descriptive language, periods |
-| 2 | Capitalisation, action verbs, question marks |
-| 3 | Animal identification, exclamation marks, prepositional phrases |
-| 4 | Adjectives, multi-word sentences |
-| 5 | Plural words, complex sentences |
-| 6 | Past tense verbs, advanced sentence building |
+| Track | For | Flavour |
+|---|---|---|
+| **Age 5** | First words | Animal words, CVC vocabulary, simple 3–4 word sentences |
+| **Age 6** | Building readers | Joining words, plurals, capital letters, 4–5 word sentences |
+| **Age 7** | Growing readers | Verbs, adjectives, prepositional phrases, longer sentences |
+| **Age 8** | Confident readers | Adverbs, pronouns, compound words, synonyms, multi-clause sentences |
+| **Advanced · 5–6** | Reading ahead (younger) | Rhyming, irregular plurals, compound words — roughly a year ahead |
+| **Advanced · 7–8** | Reading ahead (older) | Synonyms, antonyms, abstract nouns, spelling, conjunctions |
+
+Every Sentence Adventure track runs the same 6-level shape: word recognition → capitalisation/parts of speech → punctuation → adjectives → plurals/pronouns → verbs & advanced sentence building, with difficulty scaled to the track.
 
 ---
 
@@ -99,7 +118,7 @@ npm install
 npm run dev
 ```
 
-Then open `http://localhost:5173` in your browser.
+Then open `http://localhost:8080` in your browser.
 
 ```bash
 npm run build    # production build

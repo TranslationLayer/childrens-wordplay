@@ -6,12 +6,17 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import StartScreen from "./pages/StartScreen";
+import ActivityHub from "./pages/ActivityHub";
 import LevelSelect from "./pages/LevelSelect";
 import Game from "./pages/Game";
 import EndScreen from "./pages/EndScreen";
 import NotFound from "./pages/NotFound";
 import { GameProvider } from "./contexts/GameContext";
 import BonusGame from "./pages/BonusGame";
+import Crossword from "./pages/Crossword";
+import WordSearch from "./pages/WordSearch";
+import RhymeTime from "./pages/RhymeTime";
+import MemoryMatch from "./pages/MemoryMatch";
 
 const queryClient = new QueryClient();
 
@@ -24,9 +29,14 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<StartScreen />} />
+            <Route path="/play" element={<ActivityHub />} />
             <Route path="/level-select" element={<LevelSelect />} />
             <Route path="/game" element={<Game />} />
             <Route path="/bonus-game" element={<BonusGame />} />
+            <Route path="/crossword" element={<Crossword />} />
+            <Route path="/word-search" element={<WordSearch />} />
+            <Route path="/rhyme-time" element={<RhymeTime />} />
+            <Route path="/memory-match" element={<MemoryMatch />} />
             <Route path="/end" element={<EndScreen />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
