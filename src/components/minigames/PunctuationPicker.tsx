@@ -40,17 +40,14 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
     e.dataTransfer.setData('text/plain', mark);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDraggingOver(false);
-    if (!challenge) return;
-
-    const dropped = e.dataTransfer.getData('text/plain');
-    const isCorrect = dropped === challenge.correctPunctuation;
+  // Shared by drag-drop (desktop) and tap (touch) so phones can play too.
+  const placeMark = (mark: string) => {
+    if (!challenge || droppedPunctuation) return;
+    const isCorrect = mark === challenge.correctPunctuation;
 
     if (isCorrect) {
       sounds.playCorrect();
-      setDroppedPunctuation(dropped);
+      setDroppedPunctuation(mark);
       setFeedback('correct');
       setTimeout(() => {
         onComplete();
@@ -62,18 +59,24 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
     }
   };
 
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    placeMark(e.dataTransfer.getData('text/plain'));
+  };
+
   if (!challenge) return <div>Loading...</div>;
 
   const { sentence } = challenge;
 
   return (
-    <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Add the right punctuation</CardTitle>
+    <Card className="w-full max-w-4xl text-center p-2 sm:p-6 bg-white/80 backdrop-blur-sm">
+      <CardHeader className="px-2 sm:px-6">
+        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">Add the right punctuation</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-6">
         {showHint && <InstructionAnimation type="drag" />}
-        <div className="flex items-center justify-center text-4xl font-serif bg-gray-100 p-8 rounded-lg my-8 h-32">
+        <div className="flex flex-wrap items-center justify-center text-2xl sm:text-4xl font-serif bg-gray-100 p-4 sm:p-8 rounded-lg my-6 sm:my-8 min-h-[8rem]">
           <span>{sentence}</span>
           <div
             onDrop={handleDrop}
@@ -81,25 +84,26 @@ const PunctuationPicker: React.FC<PunctuationPickerProps> = ({ onComplete }) => 
             onDragEnter={() => setIsDraggingOver(true)}
             onDragLeave={() => setIsDraggingOver(false)}
             className={cn(
-              'inline-block border-2 border-dashed border-gray-400 rounded-full w-16 h-16 ml-2 transition-colors flex items-center justify-center',
+              'inline-block border-2 border-dashed border-gray-400 rounded-full w-12 h-12 sm:w-16 sm:h-16 ml-2 transition-colors flex items-center justify-center',
               isDraggingOver && 'bg-blue-100',
               feedback === 'incorrect' && 'animate-shake border-red-500',
               droppedPunctuation && 'border-transparent'
             )}
           >
             {droppedPunctuation && (
-              <span className="text-blue-600 font-bold text-5xl">{droppedPunctuation}</span>
+              <span className="text-blue-600 font-bold text-4xl sm:text-5xl">{droppedPunctuation}</span>
             )}
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6 mt-8">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-8">
           {punctuationOptions.map((mark, index) => (
             <Button
               key={index}
               draggable={!droppedPunctuation}
               onDragStart={(e) => handleDragStart(e, mark)}
-              className="h-24 w-24 text-6xl rounded-full cursor-grab active:cursor-grabbing"
+              onClick={() => placeMark(mark)}
+              className="h-20 w-20 sm:h-24 sm:w-24 text-5xl sm:text-6xl rounded-full cursor-grab active:cursor-grabbing"
               disabled={!!droppedPunctuation}
             >
               {mark}

@@ -58,20 +58,20 @@ const ClickPop: React.FC<ClickPopProps> = ({ onComplete }) => {
   };
 
   return (
-    <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">{prompt}</CardTitle>
+    <Card className="w-full max-w-4xl text-center p-2 sm:p-6 bg-white/80 backdrop-blur-sm">
+      <CardHeader className="px-2 sm:px-6">
+        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">{prompt}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-6">
         {showHint && <InstructionAnimation type="click" />}
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-6 sm:mt-8">
           {words.map((word, index) => (
             <motion.button
               key={index}
               onClick={() => handleWordClick(word)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`h-20 w-40 text-3xl rounded-lg font-bold text-white shadow-md transition-colors ${
+              className={`h-14 sm:h-20 min-w-[5rem] px-4 sm:px-6 text-2xl sm:text-3xl rounded-lg font-bold text-white shadow-md transition-colors ${
                 selectedWords.includes(word) ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'
               }`}
               disabled={selectedWords.includes(word)}

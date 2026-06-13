@@ -69,15 +69,15 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
   if (!challenge) return <div>Loading...</div>;
 
   return (
-    <Card className="w-full max-w-4xl text-center p-6 bg-white/80 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-3xl md:text-4xl font-bold text-gray-800">Build the sentence</CardTitle>
+    <Card className="w-full max-w-4xl text-center p-2 sm:p-6 bg-white/80 backdrop-blur-sm">
+      <CardHeader className="px-2 sm:px-6">
+        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">Build the sentence</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-6">
         {showHint && <InstructionAnimation type="click" />}
         <div
           className={cn(
-            'flex items-center justify-center text-3xl font-serif bg-gray-100 p-4 rounded-lg my-8 min-h-[8rem] flex-wrap gap-4',
+            'flex items-center justify-center text-2xl sm:text-3xl font-serif bg-gray-100 p-3 sm:p-4 rounded-lg my-6 sm:my-8 min-h-[6rem] sm:min-h-[8rem] flex-wrap gap-2 sm:gap-4',
             feedback === 'incorrect' && 'animate-shake'
           )}
         >
@@ -86,7 +86,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
               key={index}
               layout
               onClick={() => moveWordToBank(word, index)}
-              className="h-16 px-6 text-3xl cursor-pointer bg-white rounded-lg shadow"
+              className="h-12 sm:h-16 px-3 sm:px-6 text-2xl sm:text-3xl cursor-pointer bg-white rounded-lg shadow"
             >
               {word}
             </motion.button>
@@ -94,13 +94,13 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
           {feedback === 'correct' && <CheckCircle className="h-12 w-12 text-green-500" />}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mt-8 min-h-[8rem]">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-6 sm:mt-8 min-h-[6rem] sm:min-h-[8rem]">
           {wordBank.map((word, index) => (
             <motion.button
               key={word + index}
               layout
               onClick={() => moveWordToSentence(word, index)}
-              className="h-16 px-6 text-3xl bg-blue-500 text-white rounded-lg shadow"
+              className="h-12 sm:h-16 px-3 sm:px-6 text-2xl sm:text-3xl bg-blue-500 text-white rounded-lg shadow"
             >
               {word}
             </motion.button>
@@ -108,7 +108,7 @@ const SentenceBuilder: React.FC<SentenceBuilderProps> = ({ onComplete }) => {
         </div>
 
         {wordBank.length === 0 && !feedback && (
-          <Button onClick={checkSentence} className="mt-8 h-20 text-3xl bg-green-500 hover:bg-green-600">
+          <Button onClick={checkSentence} className="mt-6 sm:mt-8 h-16 sm:h-20 text-2xl sm:text-3xl bg-green-500 hover:bg-green-600">
             Check My Sentence!
           </Button>
         )}
