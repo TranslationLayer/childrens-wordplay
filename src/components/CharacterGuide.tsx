@@ -10,7 +10,7 @@ interface CharacterGuideProps {
 const CharacterGuide: React.FC<CharacterGuideProps> = ({ message }) => {
   return (
     <motion.div
-      className="fixed bottom-4 left-4 flex items-end gap-4 z-20"
+      className="fixed bottom-4 left-4 hidden md:flex items-end gap-4 z-20"
       initial={{ opacity: 0, x: -100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.5 }}
