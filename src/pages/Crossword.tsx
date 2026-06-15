@@ -55,6 +55,9 @@ function buildGrid(puzzle: CrosswordPuzzle) {
 const Crossword = () => {
   const navigate = useNavigate();
   const { difficulty } = useGame();
+  const [index, setIndex] = useState(() =>
+    difficulty ? Math.floor(Math.random() * crosswordData[difficulty].length) : 0,
+  );
   const [entered, setEntered] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
   const [solved, setSolved] = useState(false);
@@ -64,7 +67,15 @@ const Crossword = () => {
     if (!difficulty) navigate('/');
   }, [difficulty, navigate]);
 
-  const puzzle = difficulty ? crosswordData[difficulty] : null;
+  const puzzles = difficulty ? crosswordData[difficulty] : [];
+  const puzzle = puzzles[index] ?? null;
+
+  const newPuzzle = () => {
+    setIndex((i) => (i + 1) % puzzles.length);
+    setEntered({});
+    setChecked(false);
+  };
+
   const { cells, numberFor } = useMemo(
     () => (puzzle ? buildGrid(puzzle) : { cells: new Map<string, CellInfo>(), numberFor: () => 0 }),
     [puzzle],
@@ -158,12 +169,19 @@ const Crossword = () => {
         <div className="flex-1 w-full max-w-md space-y-6">
           <ClueList title="Across" entries={across} numberFor={numberFor} />
           <ClueList title="Down" entries={down} numberFor={numberFor} />
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Button
               onClick={handleCheck}
               className="h-16 flex-1 text-2xl font-bold bg-emerald-500 hover:bg-emerald-600"
             >
               Check
+            </Button>
+            <Button
+              onClick={newPuzzle}
+              variant="secondary"
+              className="h-16 text-xl font-bold"
+            >
+              🔄 New
             </Button>
             <Button
               onClick={() => navigate('/play')}

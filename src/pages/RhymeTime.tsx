@@ -7,6 +7,7 @@ import { useGame } from '@/contexts/GameContext';
 import { rhymeData } from '@/data/rhymeData';
 import { shuffleArray } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import StartOverButton from '@/components/StartOverButton';
@@ -21,13 +22,27 @@ const RhymeTime = () => {
     if (!difficulty) navigate('/');
   }, [difficulty, navigate]);
 
-  const rounds = useMemo(() => (difficulty ? rhymeData[difficulty] : []), [difficulty]);
+  const [gameSet, setGameSet] = useState(() =>
+    difficulty ? Math.floor(Math.random() * rhymeData[difficulty].length) : 0,
+  );
+  const rounds = useMemo(
+    () => (difficulty ? rhymeData[difficulty][gameSet] ?? rhymeData[difficulty][0] : []),
+    [difficulty, gameSet],
+  );
   const [index, setIndex] = useState(0);
   const [wrong, setWrong] = useState<string | null>(null);
   const [solved, setSolved] = useState(false);
 
   const round = rounds[index];
   const options = useMemo(() => (round ? shuffleArray(round.options) : []), [round]);
+
+  const newGame = () => {
+    const len = difficulty ? rhymeData[difficulty].length : 1;
+    setGameSet((i) => (i + 1) % len);
+    setIndex(0);
+    setWrong(null);
+    setSolved(false);
+  };
 
   if (!difficulty || rounds.length === 0 || !round) return null;
 
@@ -85,6 +100,15 @@ const RhymeTime = () => {
             ))}
           </div>
         </Card>
+
+        <div className="flex gap-3 justify-center mt-6">
+          <Button onClick={newGame} variant="secondary" className="h-14 text-xl font-bold">
+            🔄 New Game
+          </Button>
+          <Button onClick={() => navigate('/play')} variant="outline" className="h-14 text-xl font-bold">
+            ← Back to Games
+          </Button>
+        </div>
       </div>
     </div>
   );

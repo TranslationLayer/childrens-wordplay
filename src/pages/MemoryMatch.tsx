@@ -27,20 +27,33 @@ const MemoryMatch = () => {
     if (!difficulty) navigate('/');
   }, [difficulty, navigate]);
 
+  const [setIndex, setSetIndex] = useState(() =>
+    difficulty ? Math.floor(Math.random() * memoryData[difficulty].length) : 0,
+  );
+
   const cards = useMemo<MemoryCard[]>(() => {
     if (!difficulty) return [];
-    const pairs = memoryData[difficulty];
+    const sets = memoryData[difficulty];
+    const pairs = sets[setIndex] ?? sets[0];
     const built: MemoryCard[] = [];
     pairs.forEach((p, pairId) => {
       built.push({ cardId: pairId * 2, pairId, face: p.word, kind: 'word' });
       built.push({ cardId: pairId * 2 + 1, pairId, face: p.emoji, kind: 'emoji' });
     });
     return shuffleArray(built);
-  }, [difficulty]);
+  }, [difficulty, setIndex]);
 
   const [flipped, setFlipped] = useState<number[]>([]); // cardIds currently face-up (unmatched)
   const [matched, setMatched] = useState<Set<number>>(new Set()); // pairIds matched
   const [busy, setBusy] = useState(false);
+
+  const newGame = () => {
+    const len = difficulty ? memoryData[difficulty].length : 1;
+    setSetIndex((i) => (i + 1) % len);
+    setFlipped([]);
+    setMatched(new Set());
+    setBusy(false);
+  };
 
   if (!difficulty || cards.length === 0) return null;
 
@@ -126,13 +139,22 @@ const MemoryMatch = () => {
         })}
       </div>
 
-      <Button
-        onClick={() => navigate('/play')}
-        variant="outline"
-        className="h-14 text-xl font-bold mt-8"
-      >
-        ← Back to Games
-      </Button>
+      <div className="flex gap-3 mt-8">
+        <Button
+          onClick={newGame}
+          variant="secondary"
+          className="h-14 text-xl font-bold"
+        >
+          🔄 New Game
+        </Button>
+        <Button
+          onClick={() => navigate('/play')}
+          variant="outline"
+          className="h-14 text-xl font-bold"
+        >
+          ← Back to Games
+        </Button>
+      </div>
     </div>
   );
 };

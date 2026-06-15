@@ -52,16 +52,16 @@ A sentence needs its final punctuation. Three large circular buttons show `.` `?
 A scrambled set of word tiles appears at the bottom of the screen. Tap words in the correct order to build the sentence in the area above. When all words are placed, hit **Check My Sentence!** to verify.
 
 ### Crossword
-A big-letter crossword built from a spine word with shorter words branching off it. Each clue has a **picture (emoji) hint** and shows the word length, so young readers always have a way in. Type into the large cells and hit **Check** — correct letters turn green, wrong ones shake. Puzzles scale by age range (3 words for the youngest, up to a 5×5 grid for ages 8+).
+A big-letter crossword built from a spine word with shorter words branching off it. Each clue has a **picture (emoji) hint** and shows the word length, so young readers always have a way in. Type into the large cells and hit **Check** — correct letters turn green, wrong ones shake. Puzzles scale by age range (3 words for the youngest, up to a 5×5 grid for ages 8+). Three puzzles per range, and **🔄 New** loads the next one.
 
 ### Word Search
-Drag (or swipe on touch) across a grid of big letters to find the hidden animal words. Found words highlight green and strike through on the list. The grid grows and the search gets harder by range: 6×6 horizontal/vertical for the youngest, up to a 10×10 grid with diagonal **and** backwards words for ages 8+.
+Find the hidden animal words by **tapping the first letter, then the last letter** — the line between them is checked forwards or backwards. Found words highlight green and strike through on the list, with an anchor highlight and (on desktop) a hover preview. The grid grows and the search gets harder by range: 6×6 horizontal/vertical for the youngest, up to a 10×10 grid with diagonal **and** backwards words for ages 8+. Four word lists per range, plus **🔄 New Puzzle** for a fresh grid.
 
 ### Rhyme Time
-A picture and a word appear ("Which word rhymes with 🐍 SNAKE?"). Tap the rhyming option from three big buttons. Wrong picks shake; correct picks advance through several rounds, getting trickier with age.
+A picture and a word appear ("Which word rhymes with 🐍 SNAKE?"). Tap the rhyming option from three big buttons. Wrong picks shake; correct picks advance through several rounds, getting trickier with age. Three sets of rounds per range, and **🔄 New Game** deals a fresh batch.
 
 ### Memory Match
-A classic flip-and-match game where each pair is a **word and its matching picture** (e.g. the card `FROG` matches 🐸). Flip two cards to find a pair. 4 pairs for the youngest, up to 6 for ages 8+.
+A classic flip-and-match game where each pair is a **word and its matching picture** (e.g. the card `FROG` matches 🐸). Flip two cards to find a pair. 4 pairs for the youngest, up to 6 for ages 8+. Three card sets per range, and **🔄 New Game** deals different cards.
 
 ---
 

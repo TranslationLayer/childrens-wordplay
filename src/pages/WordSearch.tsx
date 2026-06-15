@@ -37,9 +37,13 @@ const WordSearch = () => {
     if (!difficulty) navigate('/');
   }, [difficulty, navigate]);
 
-  const puzzle = difficulty ? wordSearchData[difficulty] : null;
+  const puzzles = difficulty ? wordSearchData[difficulty] : [];
+  const [index, setIndex] = useState(() =>
+    difficulty ? Math.floor(Math.random() * wordSearchData[difficulty].length) : 0,
+  );
+  const puzzle = puzzles[index] ?? null;
 
-  // Generate the grid once per puzzle.
+  // Generate the grid for the current puzzle (regenerates on New Puzzle).
   const { grid } = useMemo(
     () =>
       puzzle
@@ -118,6 +122,15 @@ const WordSearch = () => {
     setAnchor(null);
   };
 
+  const newPuzzle = () => {
+    setIndex((i) => (i + 1) % puzzles.length);
+    setFound([]);
+    setFoundCells(new Set());
+    setAnchor(null);
+    setHover(null);
+    setWrongCells(new Set());
+  };
+
   if (solved) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-indigo-50">
@@ -192,9 +205,16 @@ const WordSearch = () => {
             })}
           </ul>
           <Button
+            onClick={newPuzzle}
+            variant="secondary"
+            className="h-14 text-xl font-bold mt-8 w-full"
+          >
+            🔄 New Puzzle
+          </Button>
+          <Button
             onClick={() => navigate('/play')}
             variant="outline"
-            className="h-14 text-xl font-bold mt-8 w-full"
+            className="h-14 text-xl font-bold mt-3 w-full"
           >
             ← Back to Games
           </Button>
