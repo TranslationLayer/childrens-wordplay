@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '@/contexts/GameContext';
 import { wordSearchData } from '@/data/wordSearchData';
@@ -15,8 +15,10 @@ import { sounds } from '@/lib/sounds';
 const key = (r: number, c: number) => `${r},${c}`;
 const sign = (n: number) => (n > 0 ? 1 : n < 0 ? -1 : 0);
 
+type Cell = { r: number; c: number };
+
 /** Cells on the straight line between two points, or null if not a straight line. */
-function lineCells(a: { r: number; c: number }, b: { r: number; c: number }) {
+function lineCells(a: Cell, b: Cell) {
   const dr = b.r - a.r;
   const dc = b.c - a.c;
   const straight = dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc);
@@ -30,7 +32,6 @@ function lineCells(a: { r: number; c: number }, b: { r: number; c: number }) {
 const WordSearch = () => {
   const navigate = useNavigate();
   const { difficulty } = useGame();
-  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!difficulty) navigate('/');
@@ -49,78 +50,72 @@ const WordSearch = () => {
 
   const [found, setFound] = useState<string[]>([]);
   const [foundCells, setFoundCells] = useState<Set<string>>(new Set());
-  const [start, setStart] = useState<{ r: number; c: number } | null>(null);
-  const [current, setCurrent] = useState<{ r: number; c: number } | null>(null);
-  // Refs mirror the selection so pointer handlers always read the latest values,
-  // independent of React's re-render timing (important for fast drags / touch).
-  const startRef = useRef<{ r: number; c: number } | null>(null);
-  const currentRef = useRef<{ r: number; c: number } | null>(null);
-
-  const setStartBoth = (v: { r: number; c: number } | null) => {
-    startRef.current = v;
-    setStart(v);
-  };
-  const setCurrentBoth = (v: { r: number; c: number } | null) => {
-    currentRef.current = v;
-    setCurrent(v);
-  };
-
-  const selecting = start !== null;
+  // Click-to-select: tap the first letter (anchor), then tap the last letter.
+  const [anchor, setAnchor] = useState<Cell | null>(null);
+  const [hover, setHover] = useState<Cell | null>(null);
+  const [wrongCells, setWrongCells] = useState<Set<string>>(new Set());
 
   if (!difficulty || !puzzle) return null;
 
   const remaining = puzzle.words.filter((w) => !found.includes(w.toUpperCase()));
   const solved = remaining.length === 0;
 
-  const selection = start && current ? lineCells(start, current) : null;
-  const selectionKeys = new Set((selection || []).map((c) => key(c.r, c.c)));
+  // Live preview of the line from the anchor to the cell under the cursor.
+  const preview = anchor && hover ? lineCells(anchor, hover) : null;
+  const previewKeys = new Set((preview || []).map((c) => key(c.r, c.c)));
 
-  const cellFromPoint = (x: number, y: number) => {
-    const el = document.elementFromPoint(x, y) as HTMLElement | null;
-    const cell = el?.closest<HTMLElement>('[data-cell]');
-    if (!cell) return null;
-    return { r: Number(cell.dataset.r), c: Number(cell.dataset.c) };
+  const flashWrong = (cells: Cell[]) => {
+    const keys = new Set(cells.map((c) => key(c.r, c.c)));
+    setWrongCells(keys);
+    setTimeout(() => setWrongCells(new Set()), 600);
   };
 
-  const beginAt = (x: number, y: number) => {
-    const cell = cellFromPoint(x, y);
-    if (cell) {
-      setStartBoth(cell);
-      setCurrentBoth(cell);
+  const handleCellClick = (r: number, c: number) => {
+    const cell = { r, c };
+
+    // First tap picks the starting letter.
+    if (!anchor) {
+      setAnchor(cell);
+      return;
     }
-  };
 
-  const moveTo = (x: number, y: number) => {
-    if (!startRef.current) return;
-    const cell = cellFromPoint(x, y);
-    if (cell) setCurrentBoth(cell);
-  };
+    // Tapping the anchor again cancels the selection.
+    if (anchor.r === r && anchor.c === c) {
+      setAnchor(null);
+      return;
+    }
 
-  const finishSelection = () => {
-    const s = startRef.current;
-    const cur = currentRef.current;
-    const finalSelection = s && cur ? lineCells(s, cur) : null;
-    if (finalSelection) {
-      const letters = finalSelection.map((c) => grid[c.r][c.c]).join('');
-      const reversed = letters.split('').reverse().join('');
-      const match = puzzle.words
-        .map((w) => w.toUpperCase())
-        .find((w) => (w === letters || w === reversed) && !found.includes(w));
-      if (match) {
-        sounds.playCorrect();
-        setFound((prev) => [...prev, match]);
-        setFoundCells((prev) => {
-          const next = new Set(prev);
-          finalSelection.forEach((c) => next.add(key(c.r, c.c)));
-          return next;
-        });
-        if (found.length + 1 === puzzle.words.length) {
-          sounds.playCelebration();
-        }
+    const line = lineCells(anchor, cell);
+
+    // Second tap must form a straight line (across, down, or diagonal).
+    if (!line) {
+      flashWrong([anchor, cell]);
+      setAnchor(cell); // start over from the new tap
+      return;
+    }
+
+    const letters = line.map((p) => grid[p.r][p.c]).join('');
+    const reversed = letters.split('').reverse().join('');
+    const match = puzzle.words
+      .map((w) => w.toUpperCase())
+      .find((w) => (w === letters || w === reversed) && !found.includes(w));
+
+    if (match) {
+      sounds.playCorrect();
+      setFound((prev) => [...prev, match]);
+      setFoundCells((prev) => {
+        const next = new Set(prev);
+        line.forEach((p) => next.add(key(p.r, p.c)));
+        return next;
+      });
+      if (found.length + 1 === puzzle.words.length) {
+        sounds.playCelebration();
       }
+    } else {
+      sounds.playIncorrect();
+      flashWrong(line);
     }
-    setStartBoth(null);
-    setCurrentBoth(null);
+    setAnchor(null);
   };
 
   if (solved) {
@@ -135,46 +130,43 @@ const WordSearch = () => {
     <div className="min-h-screen bg-indigo-50 p-4 flex flex-col items-center">
       <StartOverButton />
       <h1 className="text-3xl md:text-4xl font-bold text-indigo-700 mt-4 mb-1">Word Search</h1>
-      <p className="text-lg text-gray-600 mb-6">{puzzle.title} — find all the words!</p>
+      <p className="text-lg text-gray-600 mb-1">{puzzle.title} — find all the words!</p>
+      <p className="text-base text-indigo-500 mb-6 font-medium">
+        Tap the first letter, then the last letter of a word.
+      </p>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start justify-center w-full max-w-5xl">
         <Card className="p-3 sm:p-4 bg-white shadow-md mx-auto">
           <div
-            ref={gridRef}
             className="grid gap-1 select-none"
-            style={{
-              gridTemplateColumns: `repeat(${puzzle.size}, minmax(0, 1fr))`,
-              touchAction: 'none',
-            }}
-            onPointerDown={(e) => {
-              e.preventDefault();
-              beginAt(e.clientX, e.clientY);
-            }}
-            onPointerMove={(e) => moveTo(e.clientX, e.clientY)}
-            onPointerUp={finishSelection}
-            onPointerLeave={() => selecting && finishSelection()}
+            style={{ gridTemplateColumns: `repeat(${puzzle.size}, minmax(0, 1fr))` }}
+            onMouseLeave={() => setHover(null)}
           >
             {grid.map((row, r) =>
               row.map((letter, c) => {
                 const k = key(r, c);
                 const isFound = foundCells.has(k);
-                const isSelected = selectionKeys.has(k);
+                const isAnchor = anchor?.r === r && anchor?.c === c;
+                const isPreview = previewKeys.has(k);
+                const isWrong = wrongCells.has(k);
                 return (
-                  <div
+                  <button
                     key={k}
-                    data-cell
-                    data-r={r}
-                    data-c={c}
+                    type="button"
+                    onClick={() => handleCellClick(r, c)}
+                    onMouseEnter={() => setHover({ r, c })}
                     className={cn(
                       'flex items-center justify-center rounded-md font-bold uppercase transition-colors',
                       'h-9 w-9 text-lg sm:h-12 sm:w-12 sm:text-2xl',
-                      isFound && 'bg-green-300 text-green-900',
-                      isSelected && !isFound && 'bg-indigo-400 text-white',
-                      !isFound && !isSelected && 'bg-gray-100 text-gray-700',
+                      isWrong && 'bg-red-400 text-white',
+                      !isWrong && isFound && 'bg-green-300 text-green-900',
+                      !isWrong && !isFound && isAnchor && 'bg-indigo-600 text-white ring-2 ring-indigo-700',
+                      !isWrong && !isFound && !isAnchor && isPreview && 'bg-indigo-300 text-white',
+                      !isWrong && !isFound && !isAnchor && !isPreview && 'bg-gray-100 text-gray-700 hover:bg-gray-200',
                     )}
                   >
                     {letter}
-                  </div>
+                  </button>
                 );
               }),
             )}
